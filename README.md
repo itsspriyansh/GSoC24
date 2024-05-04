@@ -1,5 +1,7 @@
 # Google Summer of Code - 2024 :rocket:
 
+This repository is for documenting all the important details regarding my project and keeping a track of my progress. This documentation is for showing my project specifications, storing a log of my task completions with all the necessary details and my everyday activity.
+
 ### General Details
 
 - **Organization:** [Nightwatchjs](https://github.com/nightwatchjs/)
