@@ -2,14 +2,19 @@
 
 This log will keep a track of my everyday progress throughout the GSoC period.
 
-## May 3, 2024
+### May 5-6, 2024
 
-* Started working on detailed tech spec for the project.
+* Continued working on the project details.
 
-## May 2, 2024
+### May 4, 2024
+
+* Started working on writing the project details (problems and solutions).
+* Did some research regarding best practices for designing commands for CLI.
+
+### May 2, 2024
 
 * Introduction meet with the mentors.
 
-## May 1, 2024
+### May 1, 2024
 
 * Got selected for GSoC'24 :tada:
