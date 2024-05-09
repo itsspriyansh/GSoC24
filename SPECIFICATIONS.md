@@ -60,7 +60,11 @@ We can divide our requirements into three sub categories: critical, important an
 
 - ADB wireless connection with pairing code is available only with android version 11 (API level 30) or higher.
 
+    > We don't need to support the devices below that, atleast through automation. *~comment from @garg3133*
+
 - There are stages when the terminal gets updated with new logs after a command is run (eg. `./emulator -avd nightwatch-android-11` shows new logs when we do something with the emulator). It will be difficult to show those logs when running the commands from the tool.
+
+    > we can push those logs into a separate file if the user asks for it by passing an appropriate flag, like `--log_dump <filename>`. *~comment from @garg3133*
 
 ## What are the possible solutions for solving these problems?
 
@@ -76,7 +80,7 @@ We can divide our requirements into three sub categories: critical, important an
 
     - Upon passing the `--list` flag, users will be shown a list of all the connected real devices.
 
-- Workflow 2 
+- Workflow 2
 
     - Users will run a subcommand `emulator` with either of these available options: `--connect`, `--disconnect` and `--list` for this workflow.
 
@@ -114,3 +118,105 @@ We can divide our requirements into three sub categories: critical, important an
 
         > *As earlier discussed, this appears a more optimal and natural approach to me. Allowing users to run the commands from the same nightwatch CLI is better way of solving this problem then trying to set up the `PATH` variable or do something else. This approach is easy and straightforward from user point of view as well.*
 
+### Iteration 2
+
+- Ideas on how documentation can be improved from users' POV.
+    
+    - **Providing troubleshooting steps:** A lot of users find difficulty when something breaks while running any command from the tool. Since mobile-helper is an automation tool, most errors can be resolved by running commands manually. We should provide the steps for manually performing a process. This will come to great use and will save a lot of time for users stuck with errors.
+
+    - **Visual Aids:** We can create flow charts showing the entire process of a workflow. For eg:
+    ![image](./assets/image5.png)
+    
+        > The above shown image is just an example and doesn't represent any proposed flow for the tool.
+
+    - **Making imporvements with user feedback:** From the discord community forum, we can see how users are interacting with our tool, what difficulties they are facing and how much is our documentation helpful to them. We can iteratively add improvements to the documentation.
+
+- Ideas on how certain parts of documentation can be made more accessible to the users.
+
+    - **Inline documentation and CLI usage instructions:** Providing important details directly inside the source code can make it more accessible for users. Some important details can also be highlighted along with the CLI usage instructions.
+
+    - **Searchable documentation:** Since Nightwatchjs already has its website with optimized search capabilities, we can expose our documentation there to make it more accessible.
+
+## Implementation
+
+The implementation can be broken into there parts:
+    
+- Writing scripts for automating the SDK workflows.
+
+- Creating commands for users to trigger the mobile-helper workflows.
+
+- Building the integration (mobile-helper workflow) between the user input command and the final automation script.
+
+The following are the SDK commands according to their priority for this project:
+
+- Cricital Commands
+
+```bash
+# to pair and connect a real device
+adb pair <device-ip>:<pairing-port> <pairing-code>
+
+adb connect <device-ip>:<port>
+
+# to launch an emulator
+emulator -avd <name-of-emulator>
+
+# to list all the SDK tools and system images available for download
+sdkmanager --list
+
+# to install the SDK tools and system images
+sdkmanager <name-of-package>
+
+# to list all the available devices
+avdmanager list devices
+
+# to list all the installed AVDs
+avdmanager list avd
+
+# to install the AVD
+avdmanager create avd --name <name-of-avd> --package <system-image> --device <name-of-device>
+
+# to list available updates
+sdkmanager --list --include_obsolete
+
+# to update a package
+sdkmanager <name-of-package>
+```
+
+- Important Commands
+
+```bash
+# to list all the currently running devices
+adb devices
+
+# to disconnect a real device
+adb disconnect <device-id>
+
+# to stop an emulator
+adb -s <emulator-id> emu kill
+
+# to delete an AVD
+avdmanager delete avd --name <name-of-avd>
+
+# to uninstall a SDK tool or system image
+sdkmanager --uninstall <name-of-package>
+```
+
+- Nice to have Commands
+
+```bash
+# to update all the packages
+sdkmanager --update
+
+# to stop all the emulators and disconnect all the devices
+adb kill-server
+```
+
+The following steps will be encountered with the execution of the mobile-helper workflow:
+
+- `AndroidSetup` class instance is created and the main `run()` function is called.
+
+- Environment is verified. The steps include:
+    - Checking Java installation
+    - Checking the presence of `ANDROID_HOME` and `JAVA_HOME` in `process.env` and loading other environment variables to `process.env`
+
+- After checking the environment, the control flow diverges from the main script and shifts to the execution of the desired SDK script.

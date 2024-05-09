@@ -2,6 +2,15 @@
 
 This log will keep a track of my everyday progress throughout the GSoC period.
 
+### May 9, 2024
+
+* Continued working on the project details.
+* Second meeting with the Nightwatch community.
+
+### May 7-8, 2024
+
+* Buffer
+
 ### May 5-6, 2024
 
 * Continued working on the project details.
