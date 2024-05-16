@@ -2,6 +2,19 @@
 
 This log will keep a track of my everyday progress throughout the GSoC period.
 
+### May 16, 2024
+
+* Third meeting with the Mentors.
+
+### May 14-15, 2024
+
+* Modified the specifications doc for more improved workflows.
+* Experimented with SDK tools and their commands in my PC.
+
+### May 10-13, 2024
+
+* Buffer
+
 ### May 9, 2024
 
 * Continued working on the project details.

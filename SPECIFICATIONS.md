@@ -14,15 +14,15 @@ The following are the currently identified problems:
 
 Users can connect their device with their computer using a USB cable. However, this can be inconvenient for some users in some circumstances. Some users might like to connect their devices wirelessly for their specific requirements. We wish to add a workflow allowing users to connect their device wirelessly without any physical connection whatsoever. This will improve accessibility of the users.
 
-### 2. Launching emulators and Managing multiple devices (real and emulator) is currently not possible with the current implementation of the tool.
+### 2. Launching AVDs and Managing multiple devices (real and emulator) is currently not possible with the current implementation of the tool.
 
-There are a lot of possible scenarios where developers would like to connect and manage multiple devices (real and emulator). The tool currently offers no such functionality to facilitate this requirement. We plan to create a workflow such that users can connect their devices, launch multiple emulators, view all the connected devices and disconnect any specific device they wish to. This improves the usability of the device to a great extent.
+There are a lot of possible scenarios where developers would like to connect and manage multiple devices (real and emulator). The tool currently offers no such functionality to facilitate this requirement. We plan to create a workflow such that users can connect their devices, launch multiple AVDs, view all the connected devices and disconnect any specific device they wish to. This improves the usability of the device to a great extent.
 
 ### 3. Searching the location of each binary to execute their commands is a hassle.
 
 The SDK offers a wide range of commands that users can execute depending on their requirements. We are planning to create several workflows for the most popular SDK commands. However, creating workflows for all the use cases covering all the available commands is not practically possible in a limited time period. The tool might cover the majority of the available commands in the future but as for now an alternative approach has to be developed to avoid the hassle of searching the locations of the binaries and improving user experience.
 
-### 4. Tool installs only a specific system images and emulator
+### 4. Tool installs only a specific system images and emulator device.
 
 The Android SDK offers a huge number of emulator devices that are not only mobile devices, but also android TVs and smart watches. There would be users/developers across the world who wish to test or try using any specific emulator depending on their requirements. The mobile-helper-tool currently sets up an emulator for pixel-5. To increase the reach and usability of the tool, we wish to add support for installing multiple emulators and corresponding system images.
 
@@ -38,16 +38,16 @@ We can divide our requirements into three sub categories: critical, important an
 
 - **Cricital Requirements**
     - Ability to connect to a device wirelessly using ADB.
-    - Ability to launch a specific emulator device.
+    - Ability to launch a specific AVD.
     - Installation of various system images.
-    - Installation of various emulator devices.
-    - Showing a list of available emulators and their corresponding system images.
+    - Installation of various AVDs.
+    - Showing a list of available AVDs and their corresponding system images.
     - Showing a list of available updates for SDK tools and installing any update.
 
 - **Important Requirements**
     - Showing a list of all the connected devices.
     - Ability to disconnect a connected device.
-    - Ability to shut down an emulator.
+    - Ability to shut down an AVD.
     - Ability to run various binaries from the tool itself.
     - Showing a list of all the installed system images.
     - Ability to uninstall system images and emulators.
@@ -70,47 +70,94 @@ We can divide our requirements into three sub categories: critical, important an
 
 ### Iteration 1
 
-- Workflow 1
-    
-    - Users will run a sub command `wireless` with either of the three flags `--connect`, `--disconnect` and `--show`.
-    
-    - Upon passing the `--connect` flag, script for connecting the device will be triggered and users will be shown the instructions to proceed.
-    
-    - Upon passing the `--disconnect` flag, users will be shown a list of all the connected devices along with a **disconnect all** option. Selecting an option will trigger the script to disconnect the specific device.
+Users will have access to the following subcommands:
 
-    - Upon passing the `--list` flag, users will be shown a list of all the connected real devices.
+- connnect
+- disconnect
+- install
+- uninstall
+
+When using these subcommands with their specific flags will trigger their corresponding workflows as described below:
+
+- Workflow 1 
+
+    This workflow is about connecting a real device with the computer wirelessly, launching an AVD and showing a list of all the connected devices. To follow this workflow, users will pass the `connect` subcommand along with:
+    
+    - `--wireless` flag which will trigger the script to setup wireless connection with the real device.
+
+    - `--avd` flag which will trigger the script to launch the AVD. At first, a list of all the available AVDs will be shown to the user. Upon selecting an option, the selected AVD will be launched.
+
+    - `--show` flag which will display a list of all the connected devices.
+
+    ```bash
+    # to connect with real device
+    npx @nightwatch/mobile-helper android connect --wireless
+
+    # to launch an AVD
+    npx @nightwatch/mobile-helper android connect --avd
+
+    # to show all the connected devices
+    npx @nightwatch/mobile-helper android connect --show
+    ```
 
 - Workflow 2
 
-    - Users will run a subcommand `emulator` with either of these available options: `--connect`, `--disconnect` and `--list` for this workflow.
+    This workflow is for disconnecting a device. For this workflow, users will pass the `disconnect` subcommand. A list of all the currently connected devices (both real and AVDs) will be shown along with a *disconnect all* option. Upon selecting an option, the specific device will be disconnected (*disconnect all* will disconnect all the connected devices).
 
-    - `--connect` flag will show a list of all the available emulators and upon choosing an option will launch the emulator.
-
-    - `--disconnect` flag will show a list of all the connected emulators along with a **disconnect all** option and upon choosing an option will shut down the specific emulator.
-
-    - `--list` will show a list of all the connected emulators.
-
-        > *Question: Would this be a good idea to create these `emulator` and `wireless` subcommands? My thought process behind this was to ensure we have minimum number of unique flags and since both emulator and real device have similar start/stop or connect/disconnect and list features, we could just cover everything related to a specific device in a subcommand and then corresponding options will be common for both the device. This will also recduces number of options for installation of emulator and system images since we can just use `emulator --install` and `image --install` rather than creating more flag like `--emulator` and `--system-image` to work with related flags like `--install` and `--uninstall`. This will also be helpful for making future additions to the tool where we might need to cover more workflows inside any previously created subcommand.*
+    ```bash
+    # to disconnect a device
+    npx @nightwatch/mobile-helper android disconnect
+    ```
 
 - Workflow 3
 
-    - Users will run the same subcommand `emulator` as above. Here it comes with two more options: `--install` and `--uninstall`.
+    This workflow is for installing system images, creating AVDs and installing APKs. It will cover the usage of `install` subcommand along with:
 
-    - `--install` will show a list of all the available emulators that user can install. Upon selecting an emulator device, a list of all the corresponding system images will be shown. Upon selecting a system image, the installation for both the system image and the emulator will initiate.
+    - `--system-image` flag which will show a list of available system images to install. Upon selecting a system image, the installation script will be triggered.
 
-    - `--uninstall` will show the list of all the currently installed emulators. Upon selecting an emulator, it will be uninstalled from the computer.
+    - `--avd` flag which will show a list of currently installed system images. Upong selecting a system image, a list of android devices will be shown from which user can select a device to create AVD with the selected system image.
 
-        > *Question: Shall we rather list down all the present emulators and list of system images in an interfaces (Hardcoded in the codebase) instead of trying to extract the details from `sdkmanager` command output? Because we know that the list of available emulators is not going to be dynamic and will mostly contain fixed items with fixed corresponding system images that we should exactly know.*
+    - `--app` flag which prompt users to enter the path to the APK they wish to install in AVD or real device. Upon entering the path, a list of all the connected devices will be shown. User will select an option and APK installation in that device will begin.
 
-        > *Question: Upon uninstalling an emulator, the corresponding system image, if not used anymore, might also require to be deleted. Shall we prompt the user if they want to delete the corresponding system image? Can we keep a track whether any system image is used by any other device as well even though one device is uninstalled?*
+    ```bash
+    # to install a system image
+    npx @nightwatch/mobile-helper android install --system-image
+
+    # to create an AVD
+    npx @nightwatch/mobile-helper android install --avd
+
+    # to install an APK in a device
+    npx @nightwatch/mobile-helper android install --app
+    ```
 
 - Workflow 4
+
+    This workflow is for uninstalling a system image and AVD. It will cover the usage of `uninstall` subcommand along with:
+
+    - `--system-image` flag which will show a list of currently installed system images along with all the AVDs used by each system image. Upon selecting an option, the specific system image will be uninstalled. If a system image being used by any existing AVD is deleted, then a warning will be shown and the AVD will also be deleted.
+
+    - `--avd` flag which will show a list of all the currently installed AVDs. Upon selecting an option, the specific AVD will be deleted.
+
+    ```bash
+    # to uninstall a system image
+    npx @nightwatch/mobile-helper android uninstall --system-image
+
+    # to delete an AVD
+    npx @nightwatch/mobile-helper android uninstall --avd
+    ```
+
+- Workflow 5
 
     - Users can use the `--update` flag to check a list of all the available updates provided by the SDK manager.
 
     - Users can either choose any specific update or just select the **update all** option to install all the available updates.
 
-- Workflow 5
+    ```bash
+    # to update the SDK tools
+    npx @nightwatch/mobile-helper android --update
+    ```
+
+- Workflow 6
 
     - Users can use nightwatch's centralized CLI for running any of the installed binaries.
 
@@ -151,65 +198,65 @@ The following are the SDK commands according to their priority for this project:
 
 - Cricital Commands
 
-```bash
-# to pair and connect a real device
-adb pair <device-ip>:<pairing-port> <pairing-code>
+    ```bash
+    # to pair and connect a real device
+    adb pair <device-ip>:<pairing-port> <pairing-code>
 
-adb connect <device-ip>:<port>
+    adb connect <device-ip>:<port>
 
-# to launch an emulator
-emulator -avd <name-of-emulator>
+    # to launch an emulator
+    emulator -avd <name-of-emulator>
 
-# to list all the SDK tools and system images available for download
-sdkmanager --list
+    # to list all the SDK tools and system images available for download
+    sdkmanager --list
 
-# to install the SDK tools and system images
-sdkmanager <name-of-package>
+    # to install the SDK tools and system images
+    sdkmanager <name-of-package>
 
-# to list all the available devices
-avdmanager list devices
+    # to list all the available devices
+    avdmanager list devices
 
-# to list all the installed AVDs
-avdmanager list avd
+    # to list all the installed AVDs
+    avdmanager list avd
 
-# to install the AVD
-avdmanager create avd --name <name-of-avd> --package <system-image> --device <name-of-device>
+    # to create the AVD
+    avdmanager create avd --name <name-of-avd> --package <system-image> --device <name-of-device>
 
-# to list available updates
-sdkmanager --list --include_obsolete
+    # to list available updates
+    sdkmanager --list --include_obsolete
 
-# to update a package
-sdkmanager <name-of-package>
-```
+    # to update a package
+    sdkmanager <name-of-package>
+    ```
 
 - Important Commands
 
-```bash
-# to list all the currently running devices
-adb devices
+    ```bash
+    # to list all the currently running devices
+    adb devices
 
-# to disconnect a real device
-adb disconnect <device-id>
+    # to disconnect a real device
+    adb disconnect <device-id>
 
-# to stop an emulator
-adb -s <emulator-id> emu kill
+    # to stop an emulator
+    adb -s <emulator-id> emu kill
 
-# to delete an AVD
-avdmanager delete avd --name <name-of-avd>
+    # to delete an AVD
+    avdmanager delete avd --name <name-of-avd>
 
-# to uninstall a SDK tool or system image
-sdkmanager --uninstall <name-of-package>
-```
+    # to uninstall a SDK tool or system image
+    sdkmanager --uninstall <name-of-package>
+    ```
 
 - Nice to have Commands
 
-```bash
-# to update all the packages
-sdkmanager --update
+    ```bash
+    # to update all the packages
+    sdkmanager --update
 
-# to stop all the emulators and disconnect all the devices
-adb kill-server
-```
+    # to stop all the AVDs and disconnect all the devices
+    adb kill-server
+    ```
 
 The following steps will be encountered with the execution of the mobile-helper workflow:
 
