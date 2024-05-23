@@ -87,7 +87,9 @@ When using these subcommands with their specific flags will trigger their corres
 
     - `--avd` flag which will trigger the script to launch the AVD. At first, a list of all the available AVDs will be shown to the user. Upon selecting an option, the selected AVD will be launched.
 
-    - `--show` flag which will display a list of all the connected devices.
+    - `--list` flag which will display a list of all the connected devices.
+
+    - If no flag is passed, then a list of all the connected devices will be shown and user will be asked if they want to connect to an AVD or a real device wirelessly.
 
     ```bash
     # to connect with real device
@@ -102,11 +104,11 @@ When using these subcommands with their specific flags will trigger their corres
 
 - Workflow 2
 
-    This workflow is for disconnecting a device. For this workflow, users will pass the `disconnect` subcommand. A list of all the currently connected devices (both real and AVDs) will be shown along with a *disconnect all* option. Upon selecting an option, the specific device will be disconnected (*disconnect all* will disconnect all the connected devices).
+    This workflow is for disconnecting a device. For this workflow, users will pass the `disconnect` subcommand along with the id of the device which they want to disconnect. If no device-id is specified then a list of all the currently connected devices (both real and AVDs) will be shown and user will be prompted to enter a device-id from the list.
 
     ```bash
     # to disconnect a device
-    npx @nightwatch/mobile-helper android disconnect
+    npx @nightwatch/mobile-helper android disconnect <device-id>
     ```
 
 - Workflow 3
@@ -117,7 +119,7 @@ When using these subcommands with their specific flags will trigger their corres
 
     - `--avd` flag which will show a list of currently installed system images. Upong selecting a system image, a list of android devices will be shown from which user can select a device to create AVD with the selected system image.
 
-    - `--app` flag which prompt users to enter the path to the APK they wish to install in AVD or real device. Upon entering the path, a list of all the connected devices will be shown. User will select an option and APK installation in that device will begin.
+    - `--app` flag, path to apk, `--deviceId` flag and the id of the desired device. This will install the apk on the chosen device. If `--app` is passed but any other argument is missing then user will be prompted to enter the required values.
 
     ```bash
     # to install a system image
@@ -127,7 +129,7 @@ When using these subcommands with their specific flags will trigger their corres
     npx @nightwatch/mobile-helper android install --avd
 
     # to install an APK in a device
-    npx @nightwatch/mobile-helper android install --app
+    npx @nightwatch/mobile-helper android install --app [/path/to/app.apk] [--deviceId <device_id>]
     ```
 
 - Workflow 4
@@ -138,12 +140,17 @@ When using these subcommands with their specific flags will trigger their corres
 
     - `--avd` flag which will show a list of all the currently installed AVDs. Upon selecting an option, the specific AVD will be deleted.
 
+    - `--app` flag and the name of the app. This will show a list of related packages and prompt the user to enter the package name which they want to uninstall.
+
     ```bash
     # to uninstall a system image
     npx @nightwatch/mobile-helper android uninstall --system-image
 
     # to delete an AVD
     npx @nightwatch/mobile-helper android uninstall --avd
+
+    # to uninstall an app
+    npx @nightwatch/mobile-helper android uninstall --app <name-of-app>
     ```
 
 - Workflow 5
