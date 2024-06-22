@@ -99,7 +99,7 @@ When using these subcommands with their specific flags will trigger their corres
     npx @nightwatch/mobile-helper android connect --avd
 
     # to show all the connected devices
-    npx @nightwatch/mobile-helper android connect --show
+    npx @nightwatch/mobile-helper android connect --list
     ```
 
 - Workflow 2

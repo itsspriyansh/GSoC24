@@ -2,6 +2,35 @@
 
 This log will keep a track of my everyday progress throughout the GSoC period.
 
+### June 21-22, 2024
+
+- Refactoring folder structure and arranging files.
+
+### June 20, 2024
+
+- Eights meeting with the Mentors.
+- GSoC google meet for midterm evaluations.
+
+### June 14-19, 2024
+
+- Writing script for uninstalling avd.
+- Writing script for uninstalling system image.
+- Writing script for uninstalling app.
+
+### June 13, 2024
+
+- Seventh meeting with the Mentors.
+
+### June 7-12, 2023
+
+- Writing scripts for installing avd.
+- Writing script for installing system image.
+- Writing script for installing app.
+
+### June 6, 2024
+
+- Sixth meeting with the Mentors.
+
 ### June 1-4, 2024
 
 - Working on implementation of separate workflow for executing sdk commands.
